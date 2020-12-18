@@ -2,14 +2,9 @@ import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 
 import styles from '../styles/pages/Home.module.css'
-
-type Member = {
-  name: string
-}
+import { Member, members } from '../state/member'
 
 export default function Home() {
-  const members: Member[] = [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }]
-
   const [currentMember, setCurrentMember] = useState<Member | undefined>()
   const [remainingTime, setRemainingTime] = useState(10)
   useEffect(() => {
