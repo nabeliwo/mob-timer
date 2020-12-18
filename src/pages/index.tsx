@@ -42,6 +42,8 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
+        <img src="/images/logo.jpg" width={200} alt="mob-timer" />
+
         {currentMember ? (
           <button
             className={styles.title}
