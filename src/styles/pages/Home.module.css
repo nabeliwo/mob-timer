@@ -12,6 +12,9 @@
   align-items: center;
   text-align: center;
 }
+.logo {
+  margin-bottom: 60px;
+}
 .title {
   margin-bottom: 20px;
   font-size: 60px;

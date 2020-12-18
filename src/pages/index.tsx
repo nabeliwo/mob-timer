@@ -42,7 +42,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <img src="/images/logo.jpg" width={200} alt="mob-timer" />
+        <img className={styles.logo} src="/images/logo.jpg" width={200} alt="mob-timer" />
 
         {currentMember ? (
           <button
