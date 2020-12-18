@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
-import { useEffect, useState } from 'react'
+
+import styles from '../styles/pages/Home.module.css'
 
 type Member = {
   name: string
@@ -42,37 +42,37 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          {currentMember ? (
-            <span
-              onClick={() => {
-                if (remainingTime === 0) {
-                  startTimer()
-                }
-              }}
-            >
-              {remainingTime === 0 ? '> Next' : `${currentMember.name} : ${remainingTime}`}
-            </span>
-          ) : (
-            <span onClick={() => startTimer()}>{'>'} Start mob-timer</span>
-          )}
-        </h1>
+        {currentMember ? (
+          <button
+            className={styles.title}
+            onClick={() => {
+              if (remainingTime === 0) {
+                startTimer()
+              }
+            }}
+          >
+            {remainingTime === 0 ? '> Next' : `${currentMember.name} : ${remainingTime}`}
+          </button>
+        ) : (
+          <button className={styles.title} onClick={() => startTimer()}>
+            {'>'} Start mob-timer
+          </button>
+        )}
 
         {members.map((member, i) => {
           return (
             <button
               key={i}
+              className={styles.button}
               onClick={() => {
                 startMemberTimer(member)
               }}
             >
-              {currentMember?.name === member.name ? <b>{`>> ${member.name}`}</b> : `> ${member.name}`}
+              {currentMember?.name === member.name ? `>> ${member.name}` : member.name}
             </button>
           )
         })}
       </main>
-
-      <footer className={styles.footer}></footer>
     </div>
   )
 }
