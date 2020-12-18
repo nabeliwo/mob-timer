@@ -1,17 +1,14 @@
+import React from 'react'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import {useEffect, useState} from "react";
+import { useEffect, useState } from 'react'
 
 type Member = {
   name: string
 }
 
 export default function Home() {
-  const members: Member[] = [
-    { name: "Alice" },
-    { name: "Bob" },
-    { name: "Charlie" },
-  ]
+  const members: Member[] = [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }]
 
   const [currentMember, setCurrentMember] = useState<Member | undefined>()
   const [remainingTime, setRemainingTime] = useState(10)
@@ -20,11 +17,13 @@ export default function Home() {
       setRemainingTime(Math.max(remainingTime - 1, 0))
     }, 1000)
 
-    return () => { clearTimeout(timeoutId) }
+    return () => {
+      clearTimeout(timeoutId)
+    }
   })
 
   const startTimer = () => {
-    const nextMemberCandidates = members.filter(member => member.name !== currentMember?.name)
+    const nextMemberCandidates = members.filter((member) => member.name !== currentMember?.name)
     console.log(nextMemberCandidates)
     const nextMember = nextMemberCandidates[Math.floor(Math.random() * nextMemberCandidates.length)]
 
@@ -44,26 +43,36 @@ export default function Home() {
 
       <main className={styles.main}>
         <h1 className={styles.title}>
-          {currentMember ? (<span onClick={() => {
-            if(remainingTime === 0) {
-              startTimer()
-            }
-          }}>{remainingTime === 0 ? "> Next" : `${currentMember.name} : ${remainingTime}`}</span>) : (<span onClick={() => startTimer() }>{'>'} Start mob-timer</span>)}
+          {currentMember ? (
+            <span
+              onClick={() => {
+                if (remainingTime === 0) {
+                  startTimer()
+                }
+              }}
+            >
+              {remainingTime === 0 ? '> Next' : `${currentMember.name} : ${remainingTime}`}
+            </span>
+          ) : (
+            <span onClick={() => startTimer()}>{'>'} Start mob-timer</span>
+          )}
         </h1>
 
-        {
-          members.map((member) => {
-            return (
-              <p onClick={() => { startMemberTimer(member) } }>
-                {currentMember?.name === member.name ? (<b>{`>> ${member.name}`}</b>) : (`> ${member.name}`)}
-              </p>
-            )
-          })
-        }
+        {members.map((member, i) => {
+          return (
+            <button
+              key={i}
+              onClick={() => {
+                startMemberTimer(member)
+              }}
+            >
+              {currentMember?.name === member.name ? <b>{`>> ${member.name}`}</b> : `> ${member.name}`}
+            </button>
+          )
+        })}
       </main>
 
-      <footer className={styles.footer}>
-      </footer>
+      <footer className={styles.footer}></footer>
     </div>
   )
 }
