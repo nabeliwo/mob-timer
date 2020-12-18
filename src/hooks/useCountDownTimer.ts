@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 
 const zeroPadding = (num: number) => `${num}`.padStart(2, '0')
 
-const toMinute = (sec: number) => {
+const toDisplayTime = (sec: number) => {
   const m = Math.floor(sec / 60)
   const s = (sec % 60) % 60
 
@@ -16,9 +16,7 @@ export const useCountDownTimer = () => {
   const startTimer = useCallback(() => {
     setTimerID(
       window.setInterval(() => {
-        setRemainingTime((prevTime) => {
-          return Math.max(prevTime - 1, 0)
-        })
+        setRemainingTime((prevTime) => Math.max(prevTime - 1, 0))
       }, 1000),
     )
   }, [])
@@ -36,6 +34,6 @@ export const useCountDownTimer = () => {
   return {
     startCountDown,
     remainingTime,
-    displayTime: toMinute(remainingTime),
+    displayTime: toDisplayTime(remainingTime),
   }
 }
