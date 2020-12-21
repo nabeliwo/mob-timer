@@ -1,21 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 
-import styles from '../styles/pages/Home.module.css'
 import { Member, members } from '../state/member'
+import { useCountDownTimer } from '../hooks/useCountDownTimer'
+import styles from '../styles/pages/Home.module.css'
 
 export default function Home() {
   const [currentMember, setCurrentMember] = useState<Member | undefined>()
-  const [remainingTime, setRemainingTime] = useState(10)
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setRemainingTime(Math.max(remainingTime - 1, 0))
-    }, 1000)
-
-    return () => {
-      clearTimeout(timeoutId)
-    }
-  })
+  const { startCountDown, remainingTime, displayTime } = useCountDownTimer()
 
   const startTimer = () => {
     const nextMemberCandidates = members.filter((member) => member.name !== currentMember?.name)
@@ -26,7 +18,7 @@ export default function Home() {
   }
   const startMemberTimer = (member: Member) => {
     setCurrentMember(member)
-    setRemainingTime(10)
+    startCountDown(10)
   }
 
   return (
@@ -48,7 +40,7 @@ export default function Home() {
               }
             }}
           >
-            {remainingTime === 0 ? '> Next' : `${currentMember.name} : ${remainingTime}`}
+            {remainingTime === 0 ? '> Next' : `${currentMember.name} : ${displayTime}`}
           </button>
         ) : (
           <button className={styles.title} onClick={() => startTimer()}>
