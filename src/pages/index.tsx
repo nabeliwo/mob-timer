@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
 
-import styles from '../styles/pages/Home.module.css'
+import { Member, members } from '../state/member'
 import { useCountDownTimer } from '../hooks/useCountDownTimer'
-
-type Member = {
-  name: string
-}
+import styles from '../styles/pages/Home.module.css'
 
 export default function Home() {
-  const members: Member[] = [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }]
-
   const [currentMember, setCurrentMember] = useState<Member | undefined>()
   const { startCountDown, remainingTime, displayTime } = useCountDownTimer()
 
