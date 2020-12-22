@@ -11,7 +11,6 @@ export default function Home() {
 
   const startTimer = () => {
     const nextMemberCandidates = members.filter((member) => member.name !== currentMember?.name)
-    console.log(nextMemberCandidates)
     const nextMember = nextMemberCandidates[Math.floor(Math.random() * nextMemberCandidates.length)]
 
     startMemberTimer(nextMember)
@@ -20,6 +19,17 @@ export default function Home() {
     setCurrentMember(member)
     startCountDown(10)
   }
+
+  useEffect(() => {
+    // TODO: ちゃんとするときはユーザが能動的に通知のポップアップを表示するようにしないとだめ
+    Notification.requestPermission()
+  }, [])
+
+  useEffect(() => {
+    if (remainingTime === 0) {
+      new Notification('時間だよ！')
+    }
+  }, [remainingTime])
 
   return (
     <div className={styles.container}>
