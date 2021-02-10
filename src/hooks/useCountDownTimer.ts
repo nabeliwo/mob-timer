@@ -11,7 +11,7 @@ const toDisplayTime = (sec: number) => {
 
 export const useCountDownTimer = () => {
   const [timerID, setTimerID] = useState(0)
-  const [remainingTime, setRemainingTime] = useState(0)
+  const [remainingTime, setRemainingTime] = useState<number | null>(null)
 
   const startTimer = useCallback(() => {
     setTimerID(

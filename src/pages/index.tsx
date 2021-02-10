@@ -57,6 +57,17 @@ export default function Home() {
     startCountDown(2)
   }
 
+  useEffect(() => {
+    // TODO: ちゃんとするときはユーザが能動的に通知のポップアップを表示するようにしないとだめ
+    Notification.requestPermission()
+  }, [])
+
+  useEffect(() => {
+    if (remainingTime === 0) {
+      new Notification('時間だよ！')
+    }
+  }, [remainingTime])
+
   return (
     <div className={styles.container}>
       <Head>
