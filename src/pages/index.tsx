@@ -1,23 +1,60 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
+import Prando from 'prando'
 
 import { Member, members } from '../state/member'
 import { useCountDownTimer } from '../hooks/useCountDownTimer'
 import styles from '../styles/pages/Home.module.css'
 
+const shuffle = (array: any[], seed: string) => {
+  const rng = new Prando(seed)
+  const tmpArray = [...array]
+
+  const shuffled = [...Array(tmpArray.length)].map((_, index) => {
+    const picked_index = rng.nextInt(index, tmpArray.length - 1)
+    const tmp = tmpArray[index]
+    tmpArray[index] = tmpArray[picked_index]
+    tmpArray[picked_index] = tmp
+
+    return tmpArray[index]
+  })
+
+  return shuffled
+}
+
+const shuffledMembers = shuffle(members, Date.now().toString())
+
+const pickMember = (number: number): Member => {
+  const index = number % shuffledMembers.length
+
+  return shuffledMembers[index]
+}
+
 export default function Home() {
+  const [currentIndex, setCurrentIndex] = useState(0)
   const [currentMember, setCurrentMember] = useState<Member | undefined>()
   const { startCountDown, remainingTime, displayTime } = useCountDownTimer()
 
-  const startTimer = () => {
-    const nextMemberCandidates = members.filter((member) => member.name !== currentMember?.name)
-    const nextMember = nextMemberCandidates[Math.floor(Math.random() * nextMemberCandidates.length)]
+  const startNextTimer = () => {
+    const newIndex = currentIndex + 1
 
-    startMemberTimer(nextMember)
+    setCurrentIndex(newIndex)
+    startTimer(newIndex)
   }
+
   const startMemberTimer = (member: Member) => {
+    const found = shuffledMembers.find((shuffledMember) => shuffledMember.name == member.name)
+    const newIndex = shuffledMembers.indexOf(found)
+
+    setCurrentIndex(newIndex)
+    startTimer(newIndex)
+  }
+
+  const startTimer = (nextIndex: number) => {
+    const member = pickMember(nextIndex)
     setCurrentMember(member)
-    startCountDown(10)
+
+    startCountDown(2)
   }
 
   useEffect(() => {
@@ -46,14 +83,14 @@ export default function Home() {
             className={styles.title}
             onClick={() => {
               if (remainingTime === 0) {
-                startTimer()
+                startNextTimer()
               }
             }}
           >
             {remainingTime === 0 ? '> Next' : `${currentMember.name} : ${displayTime}`}
           </button>
         ) : (
-          <button className={styles.title} onClick={() => startTimer()}>
+          <button className={styles.title} onClick={() => startNextTimer()}>
             {'>'} Start mob-timer
           </button>
         )}
@@ -67,7 +104,7 @@ export default function Home() {
                 startMemberTimer(member)
               }}
             >
-              {currentMember?.name === member.name ? `>> ${member.name}` : member.name}
+              {currentMember?.name === member?.name ? `>> ${member?.name}` : member?.name}
             </button>
           )
         })}
