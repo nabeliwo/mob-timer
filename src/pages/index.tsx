@@ -95,6 +95,10 @@ export default function Home() {
           </button>
         )}
 
+        <button className={styles.button} onClick={() => startNextTimer()}>
+          ⏭
+        </button>
+
         {members.map((member, i) => {
           return (
             <button
