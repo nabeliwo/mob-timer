@@ -10,8 +10,10 @@ const toDisplayTime = (sec: number) => {
 }
 
 export const useCountDownTimer = () => {
+  const [minutes, setMinutes] = useState(20)
   const [timerID, setTimerID] = useState(0)
   const [remainingTime, setRemainingTime] = useState<number | null>(null)
+  const [isPaused, setIsPaused] = useState(false)
 
   const startTimer = useCallback(() => {
     setTimerID(
@@ -21,10 +23,20 @@ export const useCountDownTimer = () => {
     )
   }, [])
 
-  const startCountDown = (time: number) => {
+  const startCountDown = () => {
     clearInterval(timerID)
-    setRemainingTime(time)
+    setRemainingTime(minutes * 60)
     startTimer()
+  }
+
+  const toggleIsPaused = () => {
+    if (isPaused) {
+      startTimer()
+    } else {
+      clearInterval(timerID)
+    }
+
+    setIsPaused((currentIsPaused) => !currentIsPaused)
   }
 
   if (remainingTime === 0) {
@@ -32,8 +44,12 @@ export const useCountDownTimer = () => {
   }
 
   return {
-    startCountDown,
+    minutes,
     remainingTime,
+    isPaused,
     displayTime: toDisplayTime(remainingTime),
+    setMinutes,
+    startCountDown,
+    toggleIsPaused,
   }
 }
